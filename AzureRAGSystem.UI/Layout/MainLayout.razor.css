@@ -1,125 +1,26 @@
 .page {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 main {
     flex: 1;
-    margin-left: 260px;
     display: flex;
     flex-direction: column;
-}
-
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-    width: 250px;
-    height: 100vh;
-    position: sticky;
-    top: 0;
-}
-
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-.app-header {
-    position: fixed;
-    top: 0;
-    left: 260px;
-    right: 0;
-    height: 70px;
-    background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 32px;
-    z-index: 999;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.brand-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.brand-text {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111827;
-    letter-spacing: -0.5px;
-}
-
-.header-actions a {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.header-actions a:hover {
-    color: #2563eb;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .content {
-    margin-top: 70px;
-    padding: 24px;
-    overflow-y: auto;
-}
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    main {
-        margin-left: 220px;
-    }
-    
-    .app-header {
-        left: 220px;
-        padding: 0 16px;
-    }
-    
-    .brand-text {
-        font-size: 18px;
-    }
+    flex: 1;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }

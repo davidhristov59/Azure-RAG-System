@@ -11,7 +11,7 @@
             </div>
             <div class="header-info">
                 <h1 class="header-title">AI Assistant</h1>
-                <p class="header-subtitle">Ask questions about your Knowledge Graph lectures</p>
+                <p class="header-subtitle">Ask questions about your files using Retrieval-Augmented Generation</p>
             </div>
         </div>
         @if (_currentSessionId != null)
@@ -38,7 +38,7 @@
                     </svg>
                 </div>
                 <h2 class="welcome-title">Start a Conversation</h2>
-                <p class="welcome-text">Ask me anything about your Knowledge Graph and GNN lecture notes</p>
+                <p class="welcome-text">Ask me anything about your files </p>
                 <div class="suggestion-chips">
                     <button class="chip" @onclick='() => SetPrompt("What is a Knowledge Graph?")'>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

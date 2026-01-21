@@ -5,13 +5,15 @@
     height: 100vh;
     background: linear-gradient(180deg, #1a1d29 0%, #0f111a 100%);
     position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 /* Chat Header */
 .chat-header {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 20px 24px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
