@@ -1,0 +1,41 @@
+﻿@inherits LayoutComponentBase
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
+
+    <main>
+        <div class="app-header">
+            <div class="brand">
+                <span class="brand-icon">
+                    <svg width="32" height="32" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M33.338 6.544h26.038l-27.03 80.087a4.152 4.152 0 0 1-3.933 2.824H8.149a4.145 4.145 0 0 1-3.928-5.47L29.404 9.368a4.152 4.152 0 0 1 3.934-2.824z" fill="url(#azure-a)"/>
+                        <path d="M71.175 60.261H41.29a1.911 1.911 0 0 0-1.305 3.309l26.532 24.762a4.171 4.171 0 0 0 2.846 1.121h23.814L71.175 60.261z" fill="#0078D4"/>
+                        <path d="M33.338 6.544a4.118 4.118 0 0 0-3.943 2.879L4.252 83.917a4.14 4.14 0 0 0 3.908 5.538h20.787a4.443 4.443 0 0 0 3.41-2.9l5.014-14.777 17.91 16.705a4.237 4.237 0 0 0 2.666.972h23.819L62.534 53.266l-29.2.006 17.006-46.728H33.338z" fill="url(#azure-b)"/>
+                        <defs>
+                            <linearGradient id="azure-a" x1="46.153" y1="10.116" x2="25.913" y2="91.445" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#114A8B"/>
+                                <stop offset="1" stop-color="#0669BC"/>
+                            </linearGradient>
+                            <linearGradient id="azure-b" x1="56.293" y1="53.109" x2="49.023" y2="55.453" gradientUnits="userSpaceOnUse">
+                                <stop stop-opacity=".3"/>
+                                <stop offset=".071" stop-opacity=".2"/>
+                                <stop offset=".321" stop-opacity=".1"/>
+                                <stop offset=".623" stop-opacity=".05"/>
+                                <stop offset="1" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </span>
+                <span class="brand-text">Azure AI Search</span>
+            </div>
+            <div class="header-actions">
+                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

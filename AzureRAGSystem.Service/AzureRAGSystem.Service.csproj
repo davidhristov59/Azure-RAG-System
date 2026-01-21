@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AzureRAGSystem.Domain\AzureRAGSystem.Domain.csproj" />
+      <ProjectReference Include="..\AzureRAGSystem.Infrastructure\AzureRAGSystem.Infrastructure.csproj" />
+      <ProjectReference Include="..\AzureRAGSystem.Repository\AzureRAGSystem.Repository.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,155 @@
+/* wwwroot/css/app.css or wwwroot/css/site.css */
+
+.chat-interface-container {
+    display: flex;
+    flex-direction: column;
+    height: 70vh; /* Adjust as needed */
+    max-width: 800px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.messages-display {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word; /* Ensure long words break */
+    white-space: pre-wrap; /* Preserve whitespace and line breaks from AI */
+}
+
+.user-message {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto; /* Align to right */
+    border-bottom-right-radius: 4px;
+}
+
+.ai-message {
+    background-color: #e2e6ea;
+    color: #333;
+    margin-right: auto; /* Align to left */
+    border-bottom-left-radius: 4px;
+}
+
+.message p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.sources-list {
+    margin-top: 10px;
+    font-size: 0.85em;
+    border-top: 1px solid rgba(255, 255, 255, 0.3); /* For user messages */
+    padding-top: 8px;
+}
+.ai-message .sources-list {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sources-list ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 5px;
+}
+
+.sources-list li {
+    margin-bottom: 3px;
+}
+
+.sources-list a {
+    color: inherit; /* Inherit color from parent message */
+    text-decoration: underline;
+}
+
+.sources-list a:hover {
+    color: #0056b3; /* Darker blue on hover for AI sources */
+}
+
+.user-message .sources-list a:hover {
+    color: #0056b3; /* Keep it consistent */
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 15px;
+    background-color: #eee;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+.chat-input-area button {
+    background-color: #28a745; /* Green send button */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input-area button:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.chat-input-area button:disabled {
+    background-color: #90ee90;
+    cursor: not-allowed;
+}
+
+/* Spinner for loading state */
+.spinner-border {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    border: 0.1em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: .75s linear infinite spinner-border;
+    animation: .75s linear infinite spinner-border;
+}
+
+@-webkit-keyframes spinner-border {
+    to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes spinner-border {
+    to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+.typing-indicator {
+    padding: 10px 15px;
+    border-radius: 18px;
+    background-color: #e2e6ea;
+    max-width: 100px; /* Small width for indicator */
+    color: #666;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}

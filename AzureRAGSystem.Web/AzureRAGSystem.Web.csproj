@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-AzureRAGSystem.Web-555a9d42-11fc-4224-9d65-bfd22db7426e</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+         <ProjectReference Include="../AzureRAGSystem.Domain/AzureRAGSystem.Domain.csproj" />
+        <ProjectReference Include="../AzureRAGSystem.Infrastructure/AzureRAGSystem.Infrastructure.csproj" />
+        <ProjectReference Include="../AzureRAGSystem.Repository/AzureRAGSystem.Repository.csproj" />
+         <ProjectReference Include="../AzureRAGSystem.Service/AzureRAGSystem.Service.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
+        <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2" />
+        <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Shared\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\_Host.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\App.razor" />
+      <_ContentIncludedByDefault Remove="Pages\ChatPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Shared\MainLayout.razor" />
+    </ItemGroup>
+
+</Project>

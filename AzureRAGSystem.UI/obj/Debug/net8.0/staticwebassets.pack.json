@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/bin/Debug/net8.0/wwwroot/_framework/blazor.webassembly.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/obj/Debug/net8.0/scopedcss/bundle/AzureRAGSystem.UI.styles.css",
+      "PackagePath": "staticwebassets/AzureRAGSystem.UI.styles.css"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/icon-192.png",
+      "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.UI/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AzureRAGSystem.UI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AzureRAGSystem.UI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.AzureRAGSystem.UI.props",
+      "PackagePath": "build\\AzureRAGSystem.UI.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.AzureRAGSystem.UI.props",
+      "PackagePath": "buildMultiTargeting\\AzureRAGSystem.UI.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.AzureRAGSystem.UI.props",
+      "PackagePath": "buildTransitive\\AzureRAGSystem.UI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

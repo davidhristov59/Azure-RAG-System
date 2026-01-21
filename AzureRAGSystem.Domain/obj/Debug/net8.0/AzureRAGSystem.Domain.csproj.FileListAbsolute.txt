@@ -1,0 +1,12 @@
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/bin/Debug/net8.0/AzureRAGSystem.Domain.deps.json
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/bin/Debug/net8.0/AzureRAGSystem.Domain.dll
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/bin/Debug/net8.0/AzureRAGSystem.Domain.pdb
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.AssemblyInfoInputs.cache
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.AssemblyInfo.cs
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.csproj.CoreCompileInputs.cache
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.dll
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/refint/AzureRAGSystem.Domain.dll
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.pdb
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/ref/AzureRAGSystem.Domain.dll
+/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Domain/obj/Debug/net8.0/AzureRAGSystem.Domain.csproj.AssemblyReference.cache

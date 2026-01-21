@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "ebdW5noHUkXBu8C9NCLhieKMO1EgAymKwlA1w+bfelE=",
+  "Source": "AzureRAGSystem.Web",
+  "BasePath": "_content/AzureRAGSystem.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "AzureRAGSystem.Web/wwwroot",
+      "Source": "AzureRAGSystem.Web",
+      "ContentRoot": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Web/wwwroot/",
+      "BasePath": "_content/AzureRAGSystem.Web",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Web/wwwroot/css/site.css",
+      "SourceId": "AzureRAGSystem.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Web/wwwroot/",
+      "BasePath": "_content/AzureRAGSystem.Web",
+      "RelativePath": "css/site#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "c493o15rz7",
+      "Integrity": "7BzfxBc7Tw0csHgLx9kTMe6Tm+EhiuaOx4gGdoxL4Eg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/site.css"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/site.c493o15rz7.css",
+      "AssetFile": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Web/wwwroot/css/site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3312"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7BzfxBc7Tw0csHgLx9kTMe6Tm+EhiuaOx4gGdoxL4Eg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 21 Jan 2026 12:59:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c493o15rz7"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-7BzfxBc7Tw0csHgLx9kTMe6Tm+EhiuaOx4gGdoxL4Eg="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.css",
+      "AssetFile": "/Users/davidhristov/Desktop/AzureRAGSystem/AzureRAGSystem.Web/wwwroot/css/site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3312"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7BzfxBc7Tw0csHgLx9kTMe6Tm+EhiuaOx4gGdoxL4Eg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 21 Jan 2026 12:59:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7BzfxBc7Tw0csHgLx9kTMe6Tm+EhiuaOx4gGdoxL4Eg="
+        }
+      ]
+    }
+  ]
+}

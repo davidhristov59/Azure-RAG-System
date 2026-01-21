@@ -1,0 +1,260 @@
+@inject IChatService ChatService
+
+<div class="chat-container">
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <div class="header-content">
+            <div class="header-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <div class="header-info">
+                <h1 class="header-title">AI Assistant</h1>
+                <p class="header-subtitle">Ask questions about your Knowledge Graph lectures</p>
+            </div>
+        </div>
+        @if (_currentSessionId != null)
+        {
+            <div class="session-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>Session Active</span>
+            </div>
+        }
+    </div>
+
+    <!-- Chat Messages Area -->
+    <div class="chat-messages" id="chatMessages">
+        @if (!_messages.Any() && !_isThinking)
+        {
+            <div class="welcome-screen">
+                <div class="welcome-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                    </svg>
+                </div>
+                <h2 class="welcome-title">Start a Conversation</h2>
+                <p class="welcome-text">Ask me anything about your Knowledge Graph and GNN lecture notes</p>
+                <div class="suggestion-chips">
+                    <button class="chip" @onclick='() => SetPrompt("What is a Knowledge Graph?")'>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        What is a Knowledge Graph?
+                    </button>
+                    <button class="chip" @onclick='() => SetPrompt("Explain Graph Neural Networks")'>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <circle cx="5" cy="7" r="2"/>
+                            <circle cx="19" cy="7" r="2"/>
+                            <circle cx="5" cy="17" r="2"/>
+                            <circle cx="19" cy="17" r="2"/>
+                        </svg>
+                        Explain Graph Neural Networks
+                    </button>
+                </div>
+            </div>
+        }
+
+        @foreach (var msg in _messages)
+        {
+            <div class="message-wrapper @(msg.IsUser ? "user-message" : "ai-message")">
+                <div class="message-avatar">
+                    @if (msg.IsUser)
+                    {
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    }
+                    else
+                    {
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    }
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">@(msg.IsUser ? "You" : "AI Assistant")</span>
+                        <span class="message-time">@DateTime.Now.ToString("HH:mm")</span>
+                    </div>
+                    <div class="message-bubble">
+                        <div class="message-text">
+                            @((MarkupString)(msg.Text ?? string.Empty))
+                        </div>
+
+                        @if (!msg.IsUser && msg.Sources.Any())
+                        {
+                            <div class="sources-section">
+                                <div class="sources-header">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                                        <polyline points="13 2 13 9 20 9"/>
+                                    </svg>
+                                    <span>Sources (@msg.Sources.Count)</span>
+                                </div>
+                                <div class="sources-list">
+                                    @foreach (var source in msg.Sources)
+                                    {
+                                        <a href="@source.SourceDocument" target="_blank" class="source-item">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                                <polyline points="15 3 21 3 21 9"/>
+                                                <line x1="10" y1="14" x2="21" y2="3"/>
+                                            </svg>
+                                            <span>@source.Title</span>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (_isThinking)
+        {
+            <div class="message-wrapper ai-message">
+                <div class="message-avatar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">AI Assistant</span>
+                    </div>
+                    <div class="message-bubble thinking-bubble">
+                        <div class="thinking-animation">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <span class="thinking-text">Searching knowledge base...</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Chat Input Area -->
+    <div class="chat-input-wrapper">
+        <div class="input-container">
+            <div class="input-field">
+                <input type="text"
+                       @bind="_userInput"
+                       @bind:event="oninput"
+                       @onkeyup="HandleKeyPress"
+                       placeholder="Type your question here..."
+                       disabled="@_isThinking"
+                       class="message-input" />
+                <button class="attach-button" title="Attach file" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                </button>
+            </div>
+            <button class="send-button"
+                    @onclick="SendMessage"
+                    disabled="@(_isThinking || string.IsNullOrWhiteSpace(_userInput))">
+                @if (_isThinking)
+                {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinner">
+                        <line x1="12" y1="2" x2="12" y2="6"/>
+                        <line x1="12" y1="18" x2="12" y2="22"/>
+                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                        <line x1="2" y1="12" x2="6" y2="12"/>
+                        <line x1="18" y1="12" x2="22" y2="12"/>
+                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
+                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+                    </svg>
+                }
+                else
+                {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                }
+            </button>
+        </div>
+        <div class="input-footer">
+            <span class="footer-text">AI can make mistakes. Verify important information.</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _userInput = "";
+    private bool _isThinking = false;
+    private Guid? _currentSessionId;
+    private List<ChatMessageModel> _messages = new();
+
+    private void SetPrompt(string prompt)
+    {
+        _userInput = prompt;
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(_userInput)) return;
+
+        var userText = _userInput;
+        _userInput = "";
+
+        // Add User Message to UI
+        _messages.Add(new ChatMessageModel { Text = userText, IsUser = true });
+        _isThinking = true;
+
+        try
+        {
+            // Call the C# API via the Service
+            var response = await ChatService.AskQuestionAsync(userText, _currentSessionId);
+
+            if (response != null)
+            {
+                _currentSessionId = response.SessionId;
+                _messages.Add(new ChatMessageModel
+                {
+                    Text = response.ResponseMessage,
+                    IsUser = false,
+                    Sources = response.Sources.ToList()
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _messages.Add(new ChatMessageModel { Text = $"❌ Error: {ex.Message}", IsUser = false });
+        }
+        finally
+        {
+            _isThinking = false;
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            await SendMessage();
+        }
+    }
+
+    private class ChatMessageModel
+    {
+        public string Text { get; set; } = "";
+        public bool IsUser { get; set; }
+        public List<SourceDTO> Sources { get; set; } = new();
+    }
+}

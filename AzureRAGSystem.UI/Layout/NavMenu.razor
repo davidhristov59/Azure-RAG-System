@@ -1,0 +1,85 @@
+﻿<div class="sidebar">
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <span class="section-label">MAIN</span>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Dashboard</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="chat">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">AI Assistant</span>
+                        <span class="nav-badge">New</span>
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <span class="section-label">RESOURCES</span>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="documents">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                                <polyline points="13 2 13 9 20 9"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Documents</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="analytics">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="20" x2="12" y2="10"/>
+                                <line x1="18" y1="20" x2="18" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="16"/>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Analytics</span>
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-profile">
+            <div class="user-avatar">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
+            <div class="user-info">
+                <div class="user-name">Demo User</div>
+                <div class="user-role">Administrator</div>
+            </div>
+        </div>
+        <div class="version-info">
+            <span class="version-label">Version</span>
+            <span class="version-number">1.0.0</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+}
