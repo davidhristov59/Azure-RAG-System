@@ -1,5 +1,11 @@
 @page "/chat"
 
-<PageTitle>Knowledge Graph Assistant</PageTitle>
+<PageTitle>Azure AI Assistant</PageTitle>
 
-<ChatInterface />
+<ChatInterface SessionId="SessionId"/>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "sessionId")]
+    public Guid? SessionId { get; set; }
+}

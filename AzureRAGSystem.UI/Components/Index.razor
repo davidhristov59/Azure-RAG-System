@@ -1,0 +1,318 @@
+@inject IDocumentService DocumentService
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <span class="header-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+        </span>
+        <div class="header-info">
+            <h1>Dashboard</h1>
+            <p class="header-subtitle">Azure RAG Knowledge Base</p>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <!-- 1. Knowledge Base Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total-docs">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="label">Total Documents</span>
+                    <div class="value-row">
+                        <span class="value">@indexedDocuments.Count</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon storage">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="stat-info" style="width: 100%">
+                    <span class="label">Storage Usage (Free Tier)</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: @(CalculateStoragePercent())%"></div>
+                    </div>
+                    <span class="sub-label">@currentStorageKB.ToString("F2") KB of 50 MB used</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                 <div class="stat-icon categories">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                        <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <span class="label">Top Categories</span>
+                    <div class="categories-mini-list">
+                        @foreach (var cat in GetTopCategories().Take(2))
+                        {
+                            <div class="cat-item">
+                                <span class="cat-name">@cat.Key</span>
+                                <span class="cat-count">@cat.Value</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-dashboard-grid">
+            <!-- 2. Recent Activity -->
+            <div class="dashboard-panel">
+                <div class="panel-header">
+                    <h3>Recent Activity</h3>
+                    <div class="indexer-status @indexerStatus.ToLower()">
+                        <div class="status-dot"></div>
+                        <span>@indexerStatus</span>
+                    </div>
+                </div>
+                <div class="recent-list">
+                    @if (indexedDocuments.Any())
+                    {
+                        @foreach (var doc in indexedDocuments.Take(4))
+                        {
+                            <div class="recent-item" @onclick="() => OpenDocumentPreview(doc)">
+                                <div class="item-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                </div>
+                                <div class="item-info">
+                                    <span class="item-title">@doc.Title</span>
+                                    <span class="item-meta">@doc.Category</span>
+                                </div>
+                                <span class="status-badge success">Indexed</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-message">No recent activity</div>
+                    }
+                </div>
+            </div>
+
+            <!-- 4. System Health & Performance -->
+            <div class="dashboard-panel">
+                <div class="panel-header">
+                    <h3>System Health</h3>
+                </div>
+                
+                <div class="health-metrics">
+                    <div class="health-metric">
+                        <div class="metric-header">
+                            <span>LLM Latency</span>
+                            <span class="metric-value">@llmLatency ms</span>
+                        </div>
+                        <div class="sparkline">
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 80%"></div>
+                            <div class="bar" style="height: 55%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                        </div>
+                    </div>
+
+                    <div class="health-metric">
+                        <div class="metric-header">
+                            <span>Bias Check (BOLD)</span>
+                            <span class="bias-badge @(biasScore < 0.2 ? "safe" : "warning")">
+                                @(biasScore < 0.2 ? "Objective" : "Review")
+                            </span>
+                        </div>
+                        <div class="bias-meter">
+                            <div class="meter-fill" style="width: @(biasScore * 100 * 5)%"></div> <!-- Scaling for visual -->
+                        </div>
+                        <p class="sub-label">Variance Score: @biasScore</p>
+                    </div>
+
+                    <!-- Token Usage Tracker -->
+                    <div class="health-metric">
+                        <div class="metric-header">
+                            <span>Token Usage (Input / Output)</span>
+                            <span class="metric-value">@inputTokens / @outputTokens</span>
+                        </div>
+                        <div class="token-bar-container">
+                            <div class="token-bar input" style="width: @(CalculateTokenPercent(inputTokens))%" title="Input Tokens"></div>
+                            <div class="token-bar output" style="width: @(CalculateTokenPercent(outputTokens))%" title="Output Tokens"></div>
+                        </div>
+                        <p class="sub-label">Cost Estimate: $@(CalculateCost().ToString("F4"))</p>
+                    </div>
+
+                    <!-- Service Status -->
+                    <div class="service-status-grid">
+                        <div class="service-item">
+                            <span class="service-name">Azure Search</span>
+                            <span class="status-indicator @(azureSearchStatus.ToLower())"></span>
+                        </div>
+                        <div class="service-item">
+                            <span class="service-name">Cosmos DB</span>
+                            <span class="status-indicator @(cosmosDbStatus.ToLower())"></span>
+                        </div>
+                         <div class="service-item">
+                            <span class="service-name">OpenAI</span>
+                            <span class="status-indicator @(openAiStatus.ToLower())"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (isPreviewOpen)
+{
+    <div class="modal-overlay" @onclick="ClosePreview">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h3>@selectedDocument?.Title</h3>
+                <button class="close-btn" @onclick="ClosePreview">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (string.IsNullOrEmpty(previewUrl))
+                {
+                    <div class="loading-preview">
+                        <div class="spinner"></div>
+                        <p>Generating secure preview link...</p>
+                    </div>
+                }
+                else
+                {
+                    <iframe src="@previewUrl" class="preview-frame" title="Document Preview"></iframe>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<DocumentModel> indexedDocuments = new();
+    private string indexerStatus = "Idle";
+    private double currentStorageKB = 213.64; 
+    private int llmLatency = 1450;
+    private double biasScore = 0.08;
+    
+    // Token Usage
+    private int inputTokens = 1540;
+    private int outputTokens = 450;
+    
+    // Service Status
+    private string azureSearchStatus = "Green";
+    private string cosmosDbStatus = "Green";
+    private string openAiStatus = "Green";
+
+    // Preview Modal
+    private bool isPreviewOpen = false;
+    private DocumentModel? selectedDocument;
+    private string previewUrl = "";
+
+    private Timer? _timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try {
+            indexedDocuments = await DocumentService.GetDocumentsAsync();
+        } catch {
+            
+        }
+
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                try 
+                {
+                    // Use the specific API port (7242) instead of the UI port (NavigationManager.BaseUri)
+                    var uri = new Uri("https://localhost:7242/api/Documents/indexer-status");
+                    
+                    var result = await Http.GetFromJsonAsync<IndexerStatusResponse>(uri);
+                    indexerStatus = result?.Status ?? "Idle";
+                    
+                    // random latency fluctuation
+                    var rnd = new Random();
+                    llmLatency = rnd.Next(800, 2500);
+                    if (llmLatency > 2000) openAiStatus = "Amber";
+                    else openAiStatus = "Green";
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error fetching indexer status: {ex.Message}");
+                    indexerStatus = "Error";
+                }
+                StateHasChanged();
+            });
+        }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    public void Dispose() => _timer?.Dispose();
+
+    private class IndexerStatusResponse { public string? Status { get; set; } }
+
+    private double CalculateStoragePercent() => (currentStorageKB / 51200) * 100;
+    
+    private double CalculateTokenPercent(int tokens) => Math.Min((tokens / 5000.0) * 100, 100); // Assuming 5k max for visual
+    
+    private double CalculateCost() 
+    {
+        // Approximate GPT-4o pricing: $5.00 / 1M input, $15.00 / 1M output
+        return (inputTokens / 1000000.0 * 5.00) + (outputTokens / 1000000.0 * 15.00);
+    }
+
+    private IEnumerable<KeyValuePair<string, int>> GetTopCategories()
+    {
+        if (indexedDocuments == null) return Enumerable.Empty<KeyValuePair<string, int>>();
+
+        return indexedDocuments
+            .GroupBy(d => d.Category)
+            .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+            .OrderByDescending(x => x.Value);
+    }
+
+    private async Task OpenDocumentPreview(DocumentModel doc)
+    {
+        selectedDocument = doc;
+        isPreviewOpen = true;
+        previewUrl = ""; // Reset URL while loading
+        
+        try 
+        {
+            // Call backend to get SAS URL
+            previewUrl = await DocumentService.GetDocumentPreviewUrlAsync(doc.FileName);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching preview URL: {ex.Message}");
+            // Handle error (maybe show a message in the modal)
+        }
+    }
+
+    private void ClosePreview()
+    {
+        isPreviewOpen = false;
+        selectedDocument = null;
+        previewUrl = "";
+    }
+}

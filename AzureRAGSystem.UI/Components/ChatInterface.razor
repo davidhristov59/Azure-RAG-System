@@ -200,6 +200,59 @@
     private bool _isThinking = false;
     private Guid? _currentSessionId;
     private List<ChatMessageModel> _messages = new();
+    [Parameter] public Guid? SessionId { get; set; }
+
+    private List<ChatMessage> messages = new();
+    private bool isInitialLoading = false;
+
+    // protected override async Task OnParametersSetAsync()
+    // {
+    //     // If we have a SessionId and the message list is empty (or changed), load history
+    //     if (SessionId.HasValue && SessionId != Guid.Empty)
+    //     {
+    //         isInitialLoading = true;
+    //         var history = await ChatService.GetChatHistoryAsync(SessionId.Value);
+    //     
+    //         if (history != null)
+    //         {
+    //             // Clear current view and show history
+    //             messages = history.ToList(); 
+    //         }
+    //         isInitialLoading = false;
+    //     }
+    //     else
+    //     {
+    //         // It's a brand new chat
+    //         messages.Clear();
+    //         SessionId = null;
+    //     }
+    // }
+    protected override async Task OnParametersSetAsync()
+    {
+        _currentSessionId = SessionId;
+
+        if (SessionId.HasValue && SessionId != Guid.Empty)
+        {
+            _isThinking = true;
+            var history = await ChatService.GetChatHistoryAsync(SessionId.Value);
+    
+            if (history != null)
+            {
+                _messages = history.Select(m => new ChatMessageModel
+                {
+                    Text = m.Content,
+                    IsUser = m.Role == "user",
+                    Sources = new List<SourceDTO>() 
+                }).ToList();
+            }
+            _isThinking = false;
+        }
+        else
+        {
+            _messages.Clear();
+            _currentSessionId = null;
+        }
+    }
 
     private void SetPrompt(string prompt)
     {
@@ -209,19 +262,19 @@
     private async Task SendMessage()
     {
         if (string.IsNullOrWhiteSpace(_userInput)) return;
-
+    
         var userText = _userInput;
         _userInput = "";
-
+    
         // Add User Message to UI
         _messages.Add(new ChatMessageModel { Text = userText, IsUser = true });
         _isThinking = true;
-
+    
         try
         {
-            // Call the C# API via the Service
+            // Call the  API via the Service
             var response = await ChatService.AskQuestionAsync(userText, _currentSessionId);
-
+    
             if (response != null)
             {
                 _currentSessionId = response.SessionId;
@@ -242,6 +295,8 @@
             _isThinking = false;
         }
     }
+    
+    
 
     private async Task HandleKeyPress(KeyboardEventArgs e)
     {

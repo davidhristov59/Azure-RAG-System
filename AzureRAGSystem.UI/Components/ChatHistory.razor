@@ -1,0 +1,141 @@
+@inject IChatService ChatService
+@inject NavigationManager NavigationManager
+
+<div class="sessions-container">
+    <div class="sessions-header">
+        <span class="header-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        <path d="M8 12h.01"/>
+                        <path d="M12 12h.01"/>
+                        <path d="M16 12h.01"/>
+                    </svg>
+                </span>
+        <div class="header-info">
+            <h1>Chat History</h1>
+            <p class="header-subtitle">View and manage your previous conversations</p>
+        </div>
+    </div>
+
+    <div class="user-selector">
+        <label>View Sessions For:</label>
+        <select value="@(((ChatService)ChatService).CurrentUserId)" @onchange="OnUserChanged"> <!--value="@(((ChatService)ChatService).CurrentUserId)"-->
+            @* <option value="ALL">-- All Users (Admin View) --</option> *@
+            <option value="david123">David (david123)</option>
+            <option value="test-user-001">Tester (test-user-001)</option>
+        </select>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading sessions...</p>
+        </div>
+    }
+    else if (sessions == null || !sessions.Any())
+    {
+        <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <h3>No chat sessions yet</h3>
+            <p>Start a new conversation to see your chat history here</p>
+        </div>
+    }
+    else
+    {
+        <div class="sessions-grid">
+            @foreach (var session in sessions)
+            {
+                <div class="session-card" @onclick="() => NavigateToSession(session)">
+                    <div class="session-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="session-content">
+                        <h3 class="session-name">@session.Name</h3>
+                        <p class="session-date">@session.CreatedAt.ToString("MMM dd, yyyy HH:mm")</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<ChatSessionModel> sessions;
+    private bool isLoading = true;
+
+    private async Task OnUserChanged(ChangeEventArgs e)
+    {
+        var selectedUser = e.Value?.ToString();
+        // if (!string.IsNullOrEmpty(selectedUser))
+        // {
+        //     isLoading = true;
+        //     ((ChatService)ChatService).CurrentUserId = selectedUser; 
+        //     await LoadSessions(); // Re-fetch data for the new partition key
+        // }
+        ((ChatService)ChatService).CurrentUserId = selectedUser == "ALL" ? "" : selectedUser; 
+        await LoadSessions();
+    }
+
+    private async Task LoadSessions()
+    {
+        try 
+        {
+            var sessionDTOs = await ChatService.GetUserSessionsAsync();
+            sessions = sessionDTOs.Select(s => new ChatSessionModel {
+                SessionId = s.Id,
+                Name = s.Title,
+                CreatedAt = DateTime.UtcNow, // Your DTO might need a Date field
+                UserId = s.UserId
+            }).ToList();
+        }
+        finally {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var sessionDTOs = await ChatService.GetUserSessionsAsync();
+            
+            // map DTOs to model
+            sessions = sessionDTOs.Select(s => new ChatSessionModel
+            {
+                SessionId = s.Id,
+                Name = s.Title,
+                CreatedAt = s.CreatedAt,
+                UserId = s.UserId
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading sessions: {ex.Message}");
+            sessions = new List<ChatSessionModel>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void NavigateToSession(ChatSessionModel session)
+    {
+        ((ChatService)ChatService).CurrentUserId = session.UserId;
+        NavigationManager.NavigateTo($"/chat?sessionId={session.SessionId}");
+    }
+
+    private class ChatSessionModel
+    {
+        public Guid SessionId { get; set; }
+        public string Name { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string UserId { get; set; }
+    }
+}

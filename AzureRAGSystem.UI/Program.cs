@@ -1,3 +1,5 @@
+using AzureRAGSystem.Infrastructure.Implementation;
+using AzureRAGSystem.Infrastructure.Interface;
 using AzureRAGSystem.Service.Implementation;
 using AzureRAGSystem.Service.Interface;
 using Microsoft.AspNetCore.Components.Web;
@@ -10,6 +12,13 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddHttpClient<IDocumentService, DocumentService>(client => 
+{
+    client.BaseAddress = new Uri("https://localhost:7242/"); 
+});
+
+builder.Services.AddScoped<ISearchIndexerService, SearchIndexerService>();
+
 // This allows your components to @inject IChatService
 builder.Services.AddHttpClient<IChatService, ChatService>(client => 
 {
@@ -18,8 +27,8 @@ builder.Services.AddHttpClient<IChatService, ChatService>(client =>
     client.BaseAddress = new Uri("https://localhost:7242/"); 
 });
 
+// Register the default HttpClient for components that inject HttpClient directly (like Index.razor)
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7242/") });
+
 // Build and run the WebAssembly app
 await builder.Build().RunAsync();
-
-// builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-// await builder.Build().RunAsync();

@@ -41,7 +41,7 @@
 .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
 }
 
 .brand-icon {
@@ -49,29 +49,33 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    line-height: 0;
 }
 
 .brand-text {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 /* Navigation Section */
 .sidebar-nav {
     flex: 1;
-    padding: 20px 0;
+    padding: 24px 0;
     overflow-y: auto;
 }
 
-.nav-section {
-    margin-bottom: 10px;
+.nav-section,
+.nav-section-sessions,
+.nav-section-resources {
+    margin-bottom: 24px;
 }
 
 .section-label {
     display: block;
-    padding: 0 20px 8px;
+    padding: 0 20px 12px;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.8px;
@@ -86,7 +90,7 @@
 }
 
 .nav-item {
-    margin: 2px 12px;
+    margin: 3px 16px;
 }
 
 .nav-link {

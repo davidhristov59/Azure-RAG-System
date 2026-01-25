@@ -1,0 +1,254 @@
+@inject IDocumentService DocumentService
+@inject IJSRuntime JS
+
+<div class="documents-container">
+    <div class="documents-header">
+        <span class="header-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+            </svg>
+        </span>
+        <div class="header-info">
+            <p class="header-subtitle">Upload and manage files in your knowledge base</p>
+        </div>
+    </div>
+
+    <div class="upload-section">
+        <div class="upload-controls"> 
+            <InputFile OnChange="HandleFileSelected" class="file-input" id="fileUpload" />
+            <select @bind="selectedCategory" class="category-select">
+                <option value="General">General</option>
+                <option value="Technical">Technical</option>
+                <option value="Business">Business</option>
+                <option value="Legal">Legal</option>
+            </select>
+            <button class="upload-button" @onclick="UploadFile" disabled="@(selectedFile == null || isUploading)">
+                @if (isUploading) {
+                    <span class="spinner-small"></span> <span>Uploading...</span>
+                } else {
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Upload File</span>
+                }
+            </button>
+        </div>
+        
+        @if (selectedFile != null)
+        {
+            <div class="drop-zone-text">
+                <div class="selected-file-wrapper">
+                    <span class="main-text file-name">@selectedFile.Name</span>
+                    @* The "X" Button *@
+                    <button type="button" class="remove-file-btn" @onclick="ClearSelectedFile"
+                            @onclick:preventDefault="true" @onclick:stopPropagation="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <span class="sub-text">Ready to index</span>
+            </div>
+        }
+    </div>
+
+    @if (isLoading) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Syncing with AI Search...</p>
+        </div>
+    } else if (indexedDocuments == null || !indexedDocuments.Any()) {
+        <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <h3>No documents found</h3>
+            <p>Upload a file to get started</p>
+        </div>
+    } else {
+        <div class="documents-grid">
+            @foreach (var doc in indexedDocuments) {
+                <div class="doc-card">
+                    <div class="doc-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="doc-content">
+                        <h3 class="doc-title">@doc.Title</h3>
+                        <div class="doc-meta">
+                            <span class="badge">@doc.Category</span>
+                        </div>
+                    </div>
+                    <div class="doc-actions">
+                        <button class="action-btn preview-btn" title="Preview" @onclick="() => OpenDocumentPreview(doc)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                        <button class="action-btn delete-btn" title="Delete" @onclick="() => DeleteDocument(doc.Id)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (isPreviewOpen)
+{
+    <div class="modal-overlay" @onclick="ClosePreview">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h3>@selectedDocument?.Title</h3>
+                <button class="close-btn" @onclick="ClosePreview">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (string.IsNullOrEmpty(previewUrl))
+                {
+                    <div class="loading-preview">
+                        <div class="spinner"></div>
+                        <p>Generating secure preview link...</p>
+                    </div>
+                }
+                else
+                {
+                    <iframe src="@previewUrl" class="preview-frame" title="Document Preview"></iframe>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private IBrowserFile selectedFile;
+    private string selectedCategory = "General";
+    private bool isUploading = false;
+    private bool isLoading = true;
+    private List<DocumentModel> indexedDocuments = new();
+    
+    // Preview State
+    private bool isPreviewOpen = false;
+    private DocumentModel? selectedDocument;
+    private string previewUrl = "";
+
+    protected override async Task OnInitializedAsync() => await LoadDocuments();
+
+    private void HandleFileSelected(InputFileChangeEventArgs e) => selectedFile = e.File;
+
+    private async Task UploadFile() {
+        isUploading = true;
+        var fileName = selectedFile.Name;
+        var category = selectedCategory;
+
+        var result = await DocumentService.UploadDocumentAsync(selectedFile, selectedCategory);
+    
+        if (result == "Success") {
+            indexedDocuments.Insert(0, new DocumentModel {
+                Title = fileName,
+                Category = category,
+                Id = "pending", // Temporary ID
+                SourceUrl = "#"
+            });
+        
+            selectedFile = null;
+            isUploading = false;
+            StateHasChanged();
+
+            await Task.Delay(3000);
+            await LoadDocuments(); 
+        } else {
+            isUploading = false;
+        }
+    }
+
+    private async Task LoadDocuments() {
+        isLoading = true;
+        try {
+            indexedDocuments = await DocumentService.GetDocumentsAsync();
+        } finally {
+            isLoading = false;
+            StateHasChanged(); 
+        }
+    }
+    
+    private void ClearSelectedFile()
+    {
+        selectedFile = null;
+        StateHasChanged(); 
+    }
+    
+    private async Task DeleteDocument(string docId) {
+        if (await JS.InvokeAsync<bool>("confirm", $"Delete this document?")) {
+            var success = await DocumentService.DeleteDocumentAsync(docId);
+        
+            if (success) {
+                indexedDocuments.RemoveAll(d => d.Id == docId);
+            
+                StateHasChanged(); 
+            
+                // await Task.Delay(2000); 
+                // await LoadDocuments();
+            }
+        }
+    }
+
+    private async Task OpenDocumentPreview(DocumentModel doc)
+    {
+        selectedDocument = doc;
+        isPreviewOpen = true;
+        previewUrl = ""; 
+        
+        try 
+        {
+            previewUrl = await DocumentService.GetDocumentPreviewUrlAsync(doc.FileName);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching preview URL: {ex.Message}");
+        }
+    }
+
+    private void ClosePreview() {
+        isPreviewOpen = false;
+        selectedDocument = null;
+        previewUrl = "";
+    }
+}
+
+
+<style>
+    .file-input {
+        font-size: 0 !important;
+        color: transparent !important;
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        width: auto !important;
+        max-width: 150px !important;
+    }
+
+    .file-input::file-selector-button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: #fff !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        padding: 8px 16px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        margin-right: 0 !important;
+    }
+
+    .file-input::file-selector-button:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+</style>
