@@ -12,6 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor(); // Use this if you are using Blazor Server
+
 // Register Blob Storage Service
 var storageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorage");
 builder.Services.AddScoped<IBlobService, BlobService>(sp => 
@@ -31,11 +34,12 @@ builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
         policy.WithOrigins(
                 "http://localhost:5001",   // HTTP UI
-                "https://localhost:7100"   // HTTPS UI
+                "https://localhost:7100",   // HTTPS UI
+                "https://azure-rag-platform-gudwa2bjhehme5hf.italynorth-01.azurewebsites.net" 
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .SetIsOriginAllowed(origin => true) // Allow any origin in development
+            // .SetIsOriginAllowed(origin => true) // Allow any origin in development
             .AllowCredentials();
     });
 });
@@ -47,8 +51,12 @@ builder.Services.AddScoped<IAzureOpenAIService, AzureOpenAIService>();
 builder.Services.AddScoped<IRetrievalService, RetrievalService>();
 
 // Register ChatService as a Typed Client
+// builder.Services.AddHttpClient<IChatService, ChatService>(client => {
+//     client.BaseAddress = new Uri("https://localhost:7242/"); 
+// });
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "https://localhost:7242/";
 builder.Services.AddHttpClient<IChatService, ChatService>(client => {
-    client.BaseAddress = new Uri("https://localhost:7242/"); 
+    client.BaseAddress = new Uri(apiBaseUrl);
 });
 
 // --- 2. BUILD THE APP ---
@@ -69,8 +77,7 @@ app.UseCors();
 
 app.UseAuthorization();
 app.MapControllers();
-app.MapGet("/", () => Results.Ok(new { 
-    Status = "Online", 
-    Project = "AzureRAGSystem API", 
-    Documentation = "/swagger" 
-}));app.Run();
+app.UseStaticFiles(); 
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host"); // Redirects all non-API traffic to your Blazor UI
+app.Run();
