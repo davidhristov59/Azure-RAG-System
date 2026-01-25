@@ -13,9 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor(); // Use this if you are using Blazor Server
+//builder.Services.AddServerSideBlazor(); // Use this if you are using Blazor Server
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
-// Register Blob Storage Service
+// Register Blob Storage Service 
 // var storageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorage");
 var storageConnectionString = builder.Configuration["AzureBlobStorage"];
 builder.Services.AddScoped<IBlobService, BlobService>(sp => 
@@ -77,8 +79,10 @@ app.UseRouting();
 app.UseCors(); 
 
 app.UseAuthorization();
+app.UseAntiforgery(); // Essential for .NET 8 Blazor
 app.MapControllers();
 app.UseStaticFiles(); 
 app.MapBlazorHub();
-app.MapFallbackToPage("/_Host"); // Redirects all non-API traffic to your Blazor UI
+app.MapRazorComponents<AzureRAGSystem.UI.App>()
+    .AddInteractiveServerRenderMode(); // Redirects all non-API traffic to your Blazor UI
 app.Run();

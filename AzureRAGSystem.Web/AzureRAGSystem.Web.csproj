@@ -12,6 +12,7 @@
         <ProjectReference Include="../AzureRAGSystem.Infrastructure/AzureRAGSystem.Infrastructure.csproj" />
         <ProjectReference Include="../AzureRAGSystem.Repository/AzureRAGSystem.Repository.csproj" />
          <ProjectReference Include="../AzureRAGSystem.Service/AzureRAGSystem.Service.csproj" />
+         <ProjectReference Include="..\AzureRAGSystem.UI\AzureRAGSystem.UI.csproj" />
     </ItemGroup>
 
     <ItemGroup>
