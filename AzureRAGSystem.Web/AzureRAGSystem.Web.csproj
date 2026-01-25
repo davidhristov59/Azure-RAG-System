@@ -21,8 +21,9 @@
         <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" NoWarn="NU1605" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.2" />
         <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2" />
         <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
@@ -36,6 +37,12 @@
       <_ContentIncludedByDefault Remove="Pages\App.razor" />
       <_ContentIncludedByDefault Remove="Pages\ChatPage.razor" />
       <_ContentIncludedByDefault Remove="Pages\Shared\MainLayout.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

@@ -12,9 +12,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+// Get the base address from the host environment (this will be the URL of the Web API serving the app)
+var baseAddress = builder.HostEnvironment.BaseAddress;
+
 builder.Services.AddHttpClient<IDocumentService, DocumentService>(client => 
 {
-    client.BaseAddress = new Uri("https://localhost:7242/"); 
+    client.BaseAddress = new Uri(baseAddress); 
 });
 
 builder.Services.AddScoped<ISearchIndexerService, SearchIndexerService>();
@@ -22,13 +25,11 @@ builder.Services.AddScoped<ISearchIndexerService, SearchIndexerService>();
 // This allows your components to @inject IChatService
 builder.Services.AddHttpClient<IChatService, ChatService>(client => 
 {
-    // Points to our Backend API URL
-    // The UI (port 5000) calls the API (port 7242)
-    client.BaseAddress = new Uri("https://localhost:7242/"); 
+    client.BaseAddress = new Uri(baseAddress); 
 });
 
 // Register the default HttpClient for components that inject HttpClient directly (like Index.razor)
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7242/") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
 // Build and run the WebAssembly app
 await builder.Build().RunAsync();

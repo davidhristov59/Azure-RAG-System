@@ -75,7 +75,7 @@ public class ChatController : ControllerBase
             ));
             return Ok(sessionList);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "Error retrieving user sessions");
         }

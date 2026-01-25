@@ -8,12 +8,12 @@ namespace AzureRAGSystem.Service.Implementation;
 public class DocumentService : IDocumentService
 {
     private readonly HttpClient _httpClient;
-    private readonly ChatService _chatService;
+    private readonly ChatService? _chatService;
 
     public DocumentService(HttpClient httpClient, IChatService chatService)
     {
         _httpClient = httpClient;
-        _chatService = (ChatService)chatService; 
+        _chatService = chatService as ChatService; 
     }
 
     public async Task<string> UploadDocumentAsync(IBrowserFile file, string category)
@@ -34,11 +34,17 @@ public class DocumentService : IDocumentService
     public async Task<List<DocumentModel>> GetDocumentsAsync()
     {
         AddAuthHeaders();
-        var docs = await _httpClient.GetFromJsonAsync<List<DocumentModel>>("api/Documents");
-    
-        Console.WriteLine($"DEBUG: UI received {docs?.Count ?? 0} documents.");
-    
-        return docs ?? new List<DocumentModel>();
+        try 
+        {
+            var docs = await _httpClient.GetFromJsonAsync<List<DocumentModel>>("api/Documents");
+            Console.WriteLine($"DEBUG: UI received {docs?.Count ?? 0} documents.");
+            return docs ?? new List<DocumentModel>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching documents: {ex.Message}");
+            return new List<DocumentModel>();
+        }
     }
     
     public async Task<bool> DeleteDocumentAsync(string fileName)
@@ -57,8 +63,12 @@ public class DocumentService : IDocumentService
 
     private void AddAuthHeaders()
     {
-        _httpClient.DefaultRequestHeaders.Remove("X-User-Id");
-        _httpClient.DefaultRequestHeaders.Add("X-User-Id", _chatService.CurrentUserId);
+        // TODO : change it for local development 
+        // _httpClient.DefaultRequestHeaders.Remove("X-User-Id");
+        // _httpClient.DefaultRequestHeaders.Add("X-User-Id", _chatService.CurrentUserId);
+
+        var userId = _chatService?.CurrentUserId ?? "david123";
+        _httpClient.DefaultRequestHeaders.Add("X-User-Id", userId);
     }
 
     private class PreviewUrlResponse

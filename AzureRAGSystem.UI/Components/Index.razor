@@ -245,10 +245,13 @@
             {
                 try 
                 {
-                    // Use the specific API port (7242) instead of the UI port (NavigationManager.BaseUri)
-                    var uri = new Uri("https://localhost:7242/api/Documents/indexer-status");
+                    // Use the injected HttpClient which already has the correct BaseAddress
+                    //TODO : Adjusting the endpoint for local development 
+                    // var uri = new Uri("https://localhost:7242/api/Documents/indexer-status");
+                    // var result = await Http.GetFromJsonAsync<IndexerStatusResponse>(uri);
+                    // indexerStatus = result?.Status ?? "Idle";
                     
-                    var result = await Http.GetFromJsonAsync<IndexerStatusResponse>(uri);
+                    var result = await Http.GetFromJsonAsync<IndexerStatusResponse>("api/Documents/indexer-status");
                     indexerStatus = result?.Status ?? "Idle";
                     
                     // random latency fluctuation
@@ -266,9 +269,8 @@
             });
         }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
-
-    public void Dispose() => _timer?.Dispose();
-
+    
+    
     private class IndexerStatusResponse { public string? Status { get; set; } }
 
     private double CalculateStoragePercent() => (currentStorageKB / 51200) * 100;
