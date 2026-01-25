@@ -54,6 +54,13 @@ public class RetrievalService : IRetrievalService
         // Update session with new interaction
         UpdateSessionHistory(session, request.Message , aiAnswer, searchResults);
         
+        if (session.Messages.Count <= 2) // added the first pair of messages
+        {
+            session.Title = request.Message.Length > 30 
+                ? request.Message.Substring(0, 30) + "..." 
+                : request.Message;
+        }
+        
         await _cosmosDbRepository.SaveSessionAsync(session);
 
         return new ChatResponseDTO(
@@ -78,7 +85,7 @@ public class RetrievalService : IRetrievalService
             CreatedAt = DateTime.UtcNow,
             Messages = new List<ChatMessage>()
         };
-        await _cosmosDbRepository.CreateSessionAsync(session);
+        // await _cosmosDbRepository.CreateSessionAsync(session);
         return session;
     }
 
@@ -104,7 +111,7 @@ public class RetrievalService : IRetrievalService
         {
             Id = Guid.NewGuid(),
             SessionId = chatSession.Id,
-            Content = aiResponse,
+            Content = aiResponse ?? "No answer could be generated.", // Ensure DB isn't saving null
             Role = "assistant",
             Citations = retrievedDocs.Select(doc => doc.Id.ToString()).ToList(),
             Timestamp = DateTime.UtcNow,
