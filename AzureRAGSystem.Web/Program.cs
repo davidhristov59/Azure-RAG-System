@@ -16,7 +16,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor(); // Use this if you are using Blazor Server
 
 // Register Blob Storage Service
-var storageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorage");
+// var storageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorage");
+var storageConnectionString = builder.Configuration["AzureBlobStorage"];
 builder.Services.AddScoped<IBlobService, BlobService>(sp => 
     new BlobService(storageConnectionString));
 
