@@ -9,5 +9,5 @@ namespace AzureRAGSystem.Infrastructure.Interface;
 */
 public interface ISearchService
 {
-    Task<List<KnowledgeDocument>> SearchKnowledgeBaseAsync(SearchRequestDTO searchRequestDto); 
+    Task<List<KnowledgeDocument>> SearchKnowledgeBaseAsync(SearchRequestDTO searchRequestDto);
 }

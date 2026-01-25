@@ -21,7 +21,6 @@ public class SearchService : ISearchService
         _searchClient = new SearchClient(endpoint: new Uri(endpoint), indexName: indexName, new AzureKeyCredential(apiKey));
     }
     
-    
     public async Task<List<KnowledgeDocument>> SearchKnowledgeBaseAsync(SearchRequestDTO request) 
     /*
      * RETRIEVAL 
