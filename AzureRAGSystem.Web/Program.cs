@@ -12,6 +12,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Register Blob Storage Service
+var storageConnectionString = builder.Configuration.GetConnectionString("AzureBlobStorage");
+builder.Services.AddScoped<IBlobService, BlobService>(sp => 
+    new BlobService(storageConnectionString));
+
+// Register Search Indexer Service
+builder.Services.AddScoped<ISearchIndexerService, SearchIndexerService>(sp => 
+{
+    var endpoint = builder.Configuration["AzureSearch:Endpoint"];
+    var apiKey = builder.Configuration["AzureSearch:ApiKey"];
+    var indexName = builder.Configuration["AzureSearch:IndexName"];
+    return new SearchIndexerService(endpoint, apiKey, indexName);
+});
+
 // CORS Policy: Allow both HTTP and HTTPS origins 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
@@ -55,5 +69,8 @@ app.UseCors();
 
 app.UseAuthorization();
 app.MapControllers();
-app.MapGet("/", () => "Azure RAG System API is running!"); 
-app.Run();
+app.MapGet("/", () => Results.Ok(new { 
+    Status = "Online", 
+    Project = "AzureRAGSystem API", 
+    Documentation = "/swagger" 
+}));app.Run();

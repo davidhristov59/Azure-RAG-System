@@ -1,4 +1,4 @@
-@AzureRAGSystem.Web_HostAddress = http://localhost:5047
+@AzureRAGSystem.Web_HostAddress = http://localhost:5001
 
 GET {{AzureRAGSystem.Web_HostAddress}}/weatherforecast/
 Accept: application/json
