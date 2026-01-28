@@ -38,9 +38,9 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
+    # Permissions are not strictly required for Publish Profile, but good to keep
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      contents: read 
 
     steps:
       - name: Download artifact from build job
@@ -48,18 +48,12 @@ jobs:
         with:
           name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_05A375638EDD40C1A9E17931177342E5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8945B915F8D74B6995975832C1F5C4AC }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6B83EE0FF2C04A5780193225A0176A6C }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'azure-rag-platform'
           slot-name: 'Production'
+          # Use the new secret here
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
-          
