@@ -1,6 +1,65 @@
 @AzureRAGSystem.Web_HostAddress = http://localhost:5001
 
-GET {{AzureRAGSystem.Web_HostAddress}}/weatherforecast/
+###
+
+# -----------------------
+# Documents Controller
+# -----------------------
+
+### Get All Documents
+GET {{AzureRAGSystem.Web_HostAddress}}/api/Documents
+X-User-Id: david123
 Accept: application/json
 
+### Get Indexer Status
+GET {{AzureRAGSystem.Web_HostAddress}}/api/Documents/indexer-status
+Accept: application/json
+
+### Upload Document (Multipart Example)
+POST {{AzureRAGSystem.Web_HostAddress}}/api/Documents/upload
+X-User-Id: david123
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="category"
+
+General
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+This is a sample text file content for testing the RAG system upload.
+--boundary--
+
+### Delete Document
+DELETE {{AzureRAGSystem.Web_HostAddress}}/api/Documents/test.txt
+X-User-Id: david123
+
+### Get Document Preview URL
+GET {{AzureRAGSystem.Web_HostAddress}}/api/Documents/preview/test.txt
+
 ###
+
+# -----------------------
+# Chat Controller
+# -----------------------
+
+### Ask Question (Chat Query)
+POST {{AzureRAGSystem.Web_HostAddress}}/api/Chat/query
+X-User-Id: david123
+Content-Type: application/json
+
+{
+  "message": "What information do you have about the uploaded documents?",
+  "sessionId": null
+}
+
+### Get User Sessions
+GET {{AzureRAGSystem.Web_HostAddress}}/api/Chat/sessions
+X-User-Id: david123
+Accept: application/json
+
+### Get Chat History (Replace UUID with real Session ID)
+GET {{AzureRAGSystem.Web_HostAddress}}/api/Chat/history/00000000-0000-0000-0000-000000000000
+X-User-Id: david123
+Accept: application/json
