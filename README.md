@@ -80,12 +80,13 @@ Configure the following settings in `appsettings.json` or via environment variab
     cd AzureRAGSystem.Web
     dotnet watch run 
     
-    cd ..
     cd AzureRAGSystem.UI
     dotnet watch run 
     ```
 
 ## Deployment
+The application is deployed and hosted on **Azure App Service**.
+
 This project utilizes **GitHub Actions** for Continuous Integration and Continuous Deployment (CI/CD). The workflow is configured to:
 1.  Build and test the .NET application.
 2.  Publish the artifact.
