@@ -63,7 +63,7 @@ Configure the following settings in `appsettings.json` or via environment variab
 ## Installation & Running
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/your-username/AzureRAGSystem.git
+    https://github.com/davidhristov59/Azure-RAG-System
     cd AzureRAGSystem
     ```
 
